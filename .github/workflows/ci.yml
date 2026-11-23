@@ -1,0 +1,72 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+  workflow_dispatch:
+
+jobs:
+  backend:
+    name: Backend (.NET 8)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore
+        run: dotnet restore GalyCrud.sln
+
+      - name: Build
+        run: dotnet build GalyCrud.sln --configuration Release --no-restore
+
+      - name: Tests
+        run: dotnet test GalyCrud.sln --configuration Release --no-build --verbosity normal
+
+  frontend:
+    name: Frontend (Angular 17)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: Frontend/package-lock.json
+
+      - name: Install
+        working-directory: Frontend
+        run: npm ci --no-audit --no-fund
+
+      - name: Build
+        working-directory: Frontend
+        run: npm run build:prod
+
+      - name: Tests (Chrome Headless)
+        working-directory: Frontend
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: npm run test:ci
+
+  docker:
+    name: Docker images
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build compose images
+        env:
+          GALY_JWT_KEY: ci-only-galycrud-signing-key-never-use-in-production
+          GALY_ADMIN_USERNAME: ci-admin
+          GALY_ADMIN_PASSWORD: ci-admin-password
+          GALY_EDITOR_USERNAME: ci-editor
+          GALY_EDITOR_PASSWORD: ci-editor-password
+          GALY_VIEWER_USERNAME: ci-viewer
+          GALY_VIEWER_PASSWORD: ci-viewer-password
+        run: docker compose build

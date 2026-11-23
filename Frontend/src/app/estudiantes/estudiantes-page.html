@@ -1,0 +1,212 @@
+<section class="page-header">
+  <div>
+    <span class="eyebrow">PANEL ACADÉMICO</span>
+    <h1>Estudiantes</h1>
+    <p>Consulta y administra la información de la comunidad estudiantil.</p>
+  </div>
+  @if (auth.puedeEditar()) {
+    <button type="button" class="btn btn-primary" (click)="openCreate()">
+      <span aria-hidden="true">＋</span>
+      Nuevo estudiante
+    </button>
+  }
+</section>
+
+<app-estadisticas [estadisticas]="estadisticas()" [loading]="loadingStats()" />
+
+<section class="card filtros">
+  <div class="filtro-buscar">
+    <label for="buscar-estudiante">Buscar estudiante</label>
+    <div class="search-control">
+      <span class="search-icon" aria-hidden="true">⌕</span>
+      <input
+        #searchInput
+        id="buscar-estudiante"
+        type="search"
+        [value]="search"
+        (input)="onSearch(searchInput.value)"
+        placeholder="Nombre, grado o correo"
+        autocomplete="off"
+      />
+      @if (search) {
+        <button type="button" class="clear-search" aria-label="Limpiar búsqueda" (click)="onSearch('')">×</button>
+      }
+    </div>
+  </div>
+
+  <label class="filtro-estado">
+    <span>Estado</span>
+    <select #estadoSelect [value]="estado" (change)="onEstado(estadoSelect.value)">
+      @for (opcion of estados; track opcion) {
+        <option [value]="opcion">{{ opcion }}</option>
+      }
+    </select>
+  </label>
+  @if (search || estado !== 'Todos') {
+    <button type="button" class="btn btn-quiet clear-filters" (click)="clearFilters()">
+      Limpiar filtros
+    </button>
+  }
+</section>
+
+<section class="card tabla-card" [attr.aria-busy]="loading()">
+  <div class="tabla-header">
+    <div>
+      <h2>Directorio estudiantil</h2>
+      <span class="contador">
+        {{ total() }} {{ total() === 1 ? 'estudiante' : 'estudiantes' }}
+      </span>
+    </div>
+    @if (loading()) {
+      <span class="status-loading" role="status">
+        <span class="spinner" aria-hidden="true"></span>
+        Actualizando…
+      </span>
+    }
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col" [attr.aria-sort]="ariaSort('id')">
+            <button type="button" class="sort-button" aria-label="Ordenar por ID" (click)="sort('id')">ID {{ flecha('id') }}</button>
+          </th>
+          <th scope="col" [attr.aria-sort]="ariaSort('nombre')">
+            <button type="button" class="sort-button" aria-label="Ordenar por estudiante" (click)="sort('nombre')">Estudiante {{ flecha('nombre') }}</button>
+          </th>
+          <th scope="col" [attr.aria-sort]="ariaSort('edad')">
+            <button type="button" class="sort-button" aria-label="Ordenar por edad" (click)="sort('edad')">Edad {{ flecha('edad') }}</button>
+          </th>
+          <th scope="col" [attr.aria-sort]="ariaSort('grado')">
+            <button type="button" class="sort-button" aria-label="Ordenar por grado" (click)="sort('grado')">Grado {{ flecha('grado') }}</button>
+          </th>
+          <th scope="col" [attr.aria-sort]="ariaSort('correo')">
+            <button type="button" class="sort-button" aria-label="Ordenar por correo" (click)="sort('correo')">Correo {{ flecha('correo') }}</button>
+          </th>
+          <th scope="col" [attr.aria-sort]="ariaSort('estado')">
+            <button type="button" class="sort-button" aria-label="Ordenar por estado" (click)="sort('estado')">Estado {{ flecha('estado') }}</button>
+          </th>
+          <th scope="col">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        @if (loading() && estudiantes().length === 0) {
+          <tr>
+            <td colspan="7" class="empty loading-message">
+              <span class="spinner" aria-hidden="true"></span>
+              Cargando estudiantes…
+            </td>
+          </tr>
+        } @else if (listError() && estudiantes().length === 0) {
+          <tr>
+            <td colspan="7" class="empty error-message">
+              <span>{{ listError() }}</span>
+              <button type="button" class="btn btn-secondary" (click)="load()">Intentar de nuevo</button>
+            </td>
+          </tr>
+        } @else if (estudiantes().length === 0) {
+          <tr>
+            <td colspan="7" class="empty">
+              <span class="empty-icon" aria-hidden="true">⌕</span>
+              <strong>{{ search || estado !== 'Todos' ? 'No hay resultados para estos filtros' : 'Aún no hay estudiantes' }}</strong>
+              <span>{{ search || estado !== 'Todos' ? 'Prueba con otros términos o limpia los filtros.' : 'Cuando registres estudiantes, aparecerán aquí.' }}</span>
+              @if (search || estado !== 'Todos') {
+                <button type="button" class="btn btn-secondary" (click)="clearFilters()">Limpiar filtros</button>
+              }
+            </td>
+          </tr>
+        } @else {
+          @for (estudiante of estudiantes(); track estudiante.id) {
+          <tr>
+            <td class="id-cell">#{{ estudiante.id }}</td>
+            <td class="nombre-cell">{{ estudiante.nombre }} {{ estudiante.apellido }}</td>
+            <td>{{ estudiante.edad }}</td>
+            <td>{{ estudiante.grado }}</td>
+            <td class="correo-cell">{{ estudiante.correo }}</td>
+            <td>
+              <span class="badge" [class.badge-inactivo]="estudiante.estado === 'Inactivo'">
+                {{ estudiante.estado }}
+              </span>
+            </td>
+            <td class="actions">
+              @if (auth.puedeEditar()) {
+                <button type="button" class="btn btn-small" [attr.aria-label]="'Editar a ' + estudiante.nombre + ' ' + estudiante.apellido" (click)="openEdit(estudiante)">Editar</button>
+              }
+              @if (auth.puedeEliminar()) {
+                <button type="button" class="btn btn-small btn-danger" [attr.aria-label]="'Eliminar a ' + estudiante.nombre + ' ' + estudiante.apellido" (click)="askDelete(estudiante)">
+                  Eliminar
+                </button>
+              }
+            </td>
+          </tr>
+          }
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <footer class="pager">
+    <div class="pager-summary" aria-live="polite">
+      <span>Mostrando <strong>{{ desde }}–{{ hasta }}</strong> de <strong>{{ total() }}</strong></span>
+      <label class="page-size">
+        Filas
+        <select #pageSizeSelect [value]="pageSize()" (change)="onPageSize(pageSizeSelect.value)" aria-label="Filas por página">
+          @for (cantidad of pageSizes; track cantidad) {
+            <option [value]="cantidad">{{ cantidad }}</option>
+          }
+        </select>
+      </label>
+    </div>
+    <nav class="pager-buttons" aria-label="Paginación de estudiantes">
+      <button
+        type="button"
+        class="btn btn-small"
+        aria-label="Página anterior"
+        [disabled]="page() === 1"
+        (click)="goTo(page() - 1)"
+      >
+        Anterior
+      </button>
+      @for (numero of pages; track numero) {
+        <button
+          type="button"
+          class="btn btn-small"
+          [class.btn-active]="numero === page()"
+          [attr.aria-label]="'Página ' + numero"
+          [attr.aria-current]="numero === page() ? 'page' : null"
+          (click)="goTo(numero)"
+        >
+          <span class="sr-only">Página </span>{{ numero }}
+        </button>
+      }
+      <button
+        type="button"
+        class="btn btn-small"
+        aria-label="Página siguiente"
+        [disabled]="page() === totalPages"
+        (click)="goTo(page() + 1)"
+      >
+        Siguiente
+      </button>
+    </nav>
+  </footer>
+</section>
+
+@if (showForm()) {
+  <app-estudiante-form
+    [estudiante]="editing()"
+    [saving]="saving()"
+    (submitted)="onSaved($event)"
+    (cancelled)="closeForm()"
+  />
+}
+
+@if (pendingDelete(); as estudiante) {
+  <app-confirm-dialog
+    [estudiante]="estudiante"
+    [deleting]="deleting()"
+    (confirm)="confirmDelete()"
+    (cancel)="cancelDelete()"
+  />
+}

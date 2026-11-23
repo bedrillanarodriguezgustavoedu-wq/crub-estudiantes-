@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GalyCrudBackend", "Backend\GalyCrudBackend.csproj", "{4ED9FD83-F57C-4C19-BB21-2A087A87BA08}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GalyCrudBackend.Tests", "Backend.Tests\GalyCrudBackend.Tests.csproj", "{24090065-5F1B-4771-B71D-A9D6E255F677}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4ED9FD83-F57C-4C19-BB21-2A087A87BA08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4ED9FD83-F57C-4C19-BB21-2A087A87BA08}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4ED9FD83-F57C-4C19-BB21-2A087A87BA08}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4ED9FD83-F57C-4C19-BB21-2A087A87BA08}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24090065-5F1B-4771-B71D-A9D6E255F677}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24090065-5F1B-4771-B71D-A9D6E255F677}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24090065-5F1B-4771-B71D-A9D6E255F677}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24090065-5F1B-4771-B71D-A9D6E255F677}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

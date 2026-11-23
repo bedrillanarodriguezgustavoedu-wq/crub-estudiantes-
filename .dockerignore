@@ -1,0 +1,20 @@
+.git
+.github
+**/node_modules
+**/bin
+**/obj
+**/dist
+**/.angular
+**/logs
+**/*.log
+
+# Persistencia local: se monta como volumen en el contenedor.
+Backend/Data/*.db
+Backend/Data/*.db-*
+Backend/Data/estudiantes.json
+Backend/Data/colegio.db*
+
+README.md
+ejecutar.bat
+GalyCrud.sln
+Backend.Tests/

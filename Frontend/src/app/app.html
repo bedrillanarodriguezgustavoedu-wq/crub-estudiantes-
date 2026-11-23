@@ -1,0 +1,33 @@
+<div class="app-shell">
+  @if (auth.sesion(); as sesion) {
+    <header class="topbar">
+      <div class="topbar-inner">
+        <div class="brand">
+          <span class="brand-icon" aria-hidden="true">G</span>
+          <div>
+            <span class="brand-name">Colegio Galy</span>
+            <span class="brand-sub">Gestión académica</span>
+          </div>
+        </div>
+
+        <div class="session">
+          <span class="session-avatar" aria-hidden="true">{{ sesion.usuario.slice(0, 1).toUpperCase() }}</span>
+          <span class="session-details">
+          <span class="session-user">{{ sesion.usuario }}</span>
+            <span class="session-role">{{ nombreRol(sesion.rol) }}</span>
+          </span>
+          <button type="button" class="btn btn-quiet session-logout" (click)="cerrarSesion()">
+            <span aria-hidden="true">↪</span>
+            Cerrar sesión
+          </button>
+        </div>
+      </div>
+    </header>
+  }
+
+  <main [class.main-content]="auth.sesion()" [class.auth-content]="!auth.sesion()">
+    <router-outlet></router-outlet>
+  </main>
+
+  <app-notifications></app-notifications>
+</div>

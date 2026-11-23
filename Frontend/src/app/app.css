@@ -1,0 +1,152 @@
+.app-shell {
+  min-height: 100vh;
+}
+
+.topbar {
+  position: relative;
+  z-index: 1;
+  background: linear-gradient(112deg, #123b55 0%, #155e75 58%, #0e7490 100%);
+  color: #fff;
+  box-shadow: 0 4px 18px rgb(19 53 73 / 16%);
+}
+
+.topbar-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  max-width: 1200px;
+  min-height: 72px;
+  margin: 0 auto;
+  padding: 11px 28px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+
+.brand-icon {
+  display: grid;
+  width: 40px;
+  height: 40px;
+  place-items: center;
+  border: 1px solid rgb(255 255 255 / 24%);
+  border-radius: 12px;
+  background: rgb(255 255 255 / 12%);
+  color: #fff;
+  font-size: 19px;
+  font-weight: 800;
+  letter-spacing: -0.06em;
+}
+
+.brand-name,
+.brand-sub {
+  display: block;
+}
+
+.brand-name {
+  font-size: 16px;
+  font-weight: 750;
+  letter-spacing: -0.02em;
+}
+
+.brand-sub {
+  margin-top: 2px;
+  color: rgb(255 255 255 / 72%);
+  font-size: 11px;
+}
+
+.session {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+
+.session-avatar {
+  display: grid;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  border: 1px solid rgb(255 255 255 / 24%);
+  border-radius: 50%;
+  background: rgb(255 255 255 / 15%);
+  font-size: 13px;
+  font-weight: 750;
+  text-transform: uppercase;
+}
+
+.session-details {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 84px;
+}
+
+.session-user {
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.session-role {
+  color: rgb(255 255 255 / 70%);
+  font-size: 10px;
+}
+
+.session-logout {
+  min-height: 36px;
+  margin-left: 9px;
+  border-color: rgb(255 255 255 / 22%);
+  color: #fff;
+  font-size: 12px;
+}
+
+.session-logout:hover:not(:disabled) {
+  border-color: rgb(255 255 255 / 38%);
+  background: rgb(255 255 255 / 12%);
+  color: #fff;
+}
+
+.main-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 34px 28px 56px;
+}
+
+.auth-content {
+  min-height: 100vh;
+}
+
+@media (max-width: 600px) {
+  .topbar-inner {
+    min-height: 64px;
+    padding: 9px 16px;
+  }
+
+  .brand-icon {
+    width: 36px;
+    height: 36px;
+  }
+
+  .session {
+    gap: 8px;
+  }
+
+  .session-logout {
+    width: 38px;
+    min-width: 38px;
+    margin-left: 0;
+    padding: 0;
+    overflow: hidden;
+    font-size: 0;
+  }
+
+  .session-logout span {
+    font-size: 19px;
+  }
+
+  .main-content {
+    padding: 24px 16px 40px;
+  }
+}

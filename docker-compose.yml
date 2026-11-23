@@ -1,0 +1,42 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Backend/Dockerfile
+    container_name: galycrud-backend
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ConnectionStrings__DefaultConnection: "Data Source=/app/Data/colegio.db"
+      Cors__Origins__0: http://localhost:4200
+      Jwt__Key: ${GALY_JWT_KEY:?Define una clave JWT de al menos 32 caracteres}
+      Jwt__Issuer: GalyCrud
+      Jwt__Audience: GalyCrudClient
+      Jwt__ExpireMinutes: 60
+      Auth__Users__0__Username: ${GALY_ADMIN_USERNAME:?Define el usuario administrador}
+      Auth__Users__0__Password: ${GALY_ADMIN_PASSWORD:?Define la contraseña del administrador}
+      Auth__Users__0__Role: Admin
+      Auth__Users__1__Username: ${GALY_EDITOR_USERNAME:?Define el usuario editor}
+      Auth__Users__1__Password: ${GALY_EDITOR_PASSWORD:?Define la contraseña del editor}
+      Auth__Users__1__Role: Editor
+      Auth__Users__2__Username: ${GALY_VIEWER_USERNAME:?Define el usuario de solo lectura}
+      Auth__Users__2__Password: ${GALY_VIEWER_PASSWORD:?Define la contraseña de solo lectura}
+      Auth__Users__2__Role: Viewer
+    volumes:
+      - backend-data:/app/Data
+    ports:
+      - "5000:5000"
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Frontend/Dockerfile
+    container_name: galycrud-frontend
+    depends_on:
+      - backend
+    ports:
+      - "4200:80"
+    restart: unless-stopped
+
+volumes:
+  backend-data:

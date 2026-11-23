@@ -1,0 +1,26 @@
+# .NET
+Backend/bin/
+Backend/obj/
+Backend.Tests/bin/
+Backend.Tests/obj/
+Backend/logs/
+Backend/Data/*.db
+Backend/Data/*.db-*
+Backend/Data/estudiantes.json
+
+# Node / Angular
+Frontend/node_modules/
+Frontend/dist/
+Frontend/.angular/
+
+# Docker / CI
+*.log
+.env
+.env.*
+!.env.example
+
+# Editores y sistema
+.vs/
+.idea/
+.DS_Store
+Thumbs.db
